@@ -1,0 +1,152 @@
+/* ===============================================================
+ * Companion Studio Coding Challenge
+ * Author:  Cemal Okten
+ * Github: https://github.com/cemalokten/fac-application-website
+ * Language: CSS
+================================================================== */
+
+* {
+  /* Fit content within frame of window */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --grey: #f8f8f8;
+}
+
+@font-face {
+  font-family: 'Lab Mono Web';
+  src: url('./fonts/labmono-regular-web.woff2') format('woff2'), url('./fonts/labmono-regular-web.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Salmanazar-Bold';
+  src: url('./fonts/SalmanazarTrial-Bold.otf') format('opentype');
+  font-weight: medium;
+  font-style: medium;
+}
+
+html {
+  background-color: rgb(228, 228, 228);
+}
+
+body {
+  font-size: 0.9rem;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  min-height: 100vh;
+}
+
+header,
+footer {
+  width: 100vw;
+  height: 4rem;
+  position: absolute;
+}
+
+footer {
+  bottom: 0;
+}
+
+h1,
+h2 {
+  font-size: 1.8rem;
+  font-weight: normal;
+  font-family: Salmanazar-Bold;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex--row {
+  flex-direction: row;
+}
+
+.flex--column {
+  flex-direction: column;
+}
+
+.flex--center {
+  align-items: center;
+  justify-content: center;
+}
+
+.flex--elipse {
+  color: white;
+  padding: 2rem;
+  justify-content: space-between;
+  font-family: Lab Mono Web;
+  width: 18rem;
+  height: 5rem;
+  border-radius: 50%;
+  /* margin-top: -1.2rem; */
+  margin-top: 4vh;
+  transition: width 0.3s ease-in-out;
+}
+
+.flex--elipse:first-child {
+  margin-top: 0;
+}
+
+.flex--elipse--one {
+  background-color: rgb(111, 0, 255);
+}
+
+.flex--elipse--two {
+  background-color: rgb(255, 53, 53);
+  color: black;
+}
+
+.flex--elipse--three {
+  background-color: rgb(255, 205, 253);
+  color: black;
+}
+
+.flex--elipse--four {
+  background-color: rgb(4, 0, 255);
+}
+
+.flex--elipse--five {
+  background-color: rgb(0, 255, 13);
+  color: black;
+}
+.blank--15 {
+  width: 16px;
+}
+
+@media (min-width: 1025px) {
+  body {
+    font-size: 1rem;
+  }
+
+  .flex--elipse {
+    justify-content: space-around;
+    margin-top: 0;
+    height: 30rem;
+    width: 8rem;
+    margin-left: 3rem;
+    transition: height 0.3s ease-in-out;
+  }
+
+  .flex--elipse:first-child {
+    margin-left: 0;
+  }
+
+  .flex {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .flex--row {
+    flex-direction: column;
+  }
+}
