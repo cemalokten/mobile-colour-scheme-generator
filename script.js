@@ -2,7 +2,11 @@
 
 // Variable Declarations
 
-const colorArray = [...document.getElementsByClassName('js--color--select')];
+const flexElipse = [...document.getElementsByClassName('flex--elipse')];
+const elipseArray = [...document.getElementsByClassName('drag--box')];
+const flexElipseText = [...document.getElementsByClassName('flex--elipse--text')];
+
+const body = document.querySelector('body');
 
 // Random Colour Generator
 
@@ -33,27 +37,174 @@ function textColor(r, g, b) {
   return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? '#000000' : '#FFFFFF';
 }
 
-// Set Colour
+// Set Colours
 
-colorArray.forEach((current) => {
+// childNode[4].parentNode.insertBefore(childNode[4], childNode[3]);
+
+function moveUp(current) {
+  let parent = current.parentNode;
+  let prev = current.previousSibling;
+  let oldChild = parent.removeChild(current);
+  parent.insertBefore(oldChild, prev);
+  console.log(current);
+  console.log(parent);
+}
+
+const currentColors = [];
+
+function randomColourSpan(current) {
   const element = current;
   const rgbObj = randomColour();
   const r = rgbObj.r;
   const g = rgbObj.g;
   const b = rgbObj.b;
+  let span = element.querySelector('span');
   element.style.color = textColor(r, g, b);
-  element.parentElement.style.backgroundColor = `rgb(${r},${g},${b})`;
-  element.textContent = rgbToHex(rgbObj);
-});
+  element.style.backgroundColor = `rgb(${r},${g},${b})`;
+  span.textContent = rgbToHex(rgbObj);
+}
 
-colorArray.forEach((color) => {
-  color.addEventListener('click', () => {
-    var textArea = document.createElement('textarea');
-    textArea.value = color.textContent;
+function populateRandomColours() {
+  flexElipse.forEach((current) => {
+    const element = current;
+    const rgbObj = randomColour();
+    const r = rgbObj.r;
+    const g = rgbObj.g;
+    const b = rgbObj.b;
+    let span = element.querySelector('span');
+    currentColors.push({ r, g, b });
+    element.style.color = textColor(r, g, b);
+    element.style.backgroundColor = `rgb(${r},${g},${b})`;
+    span.textContent = rgbToHex(rgbObj);
+    localStorage.setItem('colors', JSON.stringify(currentColors));
+  });
+}
+
+const stor = JSON.parse(localStorage.getItem('colors'));
+console.log(stor);
+
+function applyLocalStorage(obj) {
+  let i = 0;
+  flexElipse.forEach((element) => {
+    const r = obj[i].r;
+    const g = obj[i].g;
+    const b = obj[i].b;
+    let span = element.querySelector('span');
+    element.style.color = textColor(r, g, b);
+    element.style.backgroundColor = `rgb(${r},${g},${b})`;
+    span.textContent = rgbToHex(obj[i]);
+    i++;
+  });
+}
+
+if (stor !== null) {
+  applyLocalStorage(stor);
+  console.log('OLD COLOURS!');
+} else {
+  populateRandomColours();
+  console.log('NEW');
+}
+
+flexElipseText.forEach((current) => {
+  const element = current;
+  current.addEventListener('click', () => {
+    console.log('run');
+    let textArea = document.createElement('textarea');
+    textArea.value = element.textContent;
     document.body.appendChild(textArea);
     textArea.select();
     document.execCommand('Copy');
     textArea.remove();
-    console.log('copied');
+    element.textContent = 'COPIED';
+    setTimeout(() => {
+      element.textContent = textArea.value;
+      element.style.cursor = 'pointer';
+    }, 800);
   });
+});
+
+let contracted = 0;
+
+function contractedOrContracted(e) {
+  if (contracted === 0) {
+    elipseArray.forEach((current) => {
+      current.style.marginTop = '-2rem';
+    });
+    contracted = 1;
+  } else {
+    elipseArray.forEach((current) => {
+      current.style.marginTop = '1rem';
+    });
+    contracted = 0;
+  }
+}
+
+// ================
+
+// Swipe Up / Down / Left / Right
+let initialValueX = null; // Before move
+let initialValueY = null;
+
+function startTouch(e) {
+  initialValueX = e.touches[0].clientX; // Horizontal postion of click (e.g far left = 0)
+  initialValueY = e.touches[0].clientY; // Veritcal postion of click (eg. top = 0);
+}
+
+function moveTouchSpan(e) {
+  if (initialValueX === null || initialValueY === null) {
+    return;
+  }
+
+  let currentValueX = e.touches[0].clientX;
+  let currentValueY = e.touches[0].clientY;
+
+  let detectDiffereceX = initialValueX - currentValueX;
+  let detectDiffereceY = initialValueY - currentValueY;
+
+  if (Math.abs(detectDiffereceX) > Math.abs(detectDiffereceY)) {
+    // sliding horizontally
+    if (detectDiffereceX > 0) {
+      // swiped left
+      randomColourSpan(e.target);
+    } else {
+      // swiped right
+      randomColourSpan(e.target);
+    }
+  } else if (detectDiffereceY > 0) {
+    moveUp(e.target.parentNode);
+  } else {
+    populateRandomColours();
+  }
+
+  initialValueX = null;
+  initialValueY = null;
+
+  e.preventDefault();
+}
+
+// document.addEventListener('touchstart', startTouch, false);
+// document.addEventListener('touchmove', moveTouch, false);
+
+elipseArray.forEach((current) => {
+  current.addEventListener('touchstart', startTouch, false);
+  current.addEventListener('touchmove', moveTouchSpan, false);
+});
+
+function shareColours() {
+  const share = flexElipseText.map((c, i) => {
+    return ` COLOUR ${i + 1} - ${c.textContent}
+     `;
+  });
+  return share;
+}
+
+const share = document.querySelector('#share');
+
+share.addEventListener('click', function (e) {
+  let textArea = document.createElement('textarea');
+  textArea.value = shareColours();
+  document.body.appendChild(textArea);
+  textArea.select();
+  document.execCommand('Copy');
+  textArea.remove();
 });
