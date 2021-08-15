@@ -13,17 +13,15 @@ window.addEventListener('resize', function () {
 
 // Variable Declarations
 
-const flexElipse = [...document.getElementsByClassName('flex--elipse')];
-const elipseArray = [...document.getElementsByClassName('drag--box')];
+const flexElipse = [...document.getElementsByClassName('flex--box--inner')];
 const flexElipseText = [...document.getElementsByClassName('flex--elipse--text')];
-
-const body = document.querySelector('body');
 
 const info = document.getElementById('info');
 const infoContainer = document.querySelector('.info--container');
 const main = document.querySelector('main');
 const footer = document.querySelector('footer');
-const reload = document.getElementById('regenerate');
+const reload = document.getElementById('reload');
+const save = document.querySelector('#save');
 
 info.addEventListener('click', function () {
   infoContainer.classList.toggle('hidden');
@@ -78,7 +76,7 @@ function textColor(r, g, b) {
 
 function moveUp(current) {
   let parent = current.parentNode;
-  let prev = current.previousSibling;
+  let prev = current.previousElementSibling;
   let oldChild = parent.removeChild(current);
   parent.insertBefore(oldChild, prev);
   console.log(current);
@@ -162,22 +160,6 @@ flexElipseText.forEach((current) => {
   });
 });
 
-let contracted = 0;
-
-function contractedOrContracted(e) {
-  if (contracted === 0) {
-    elipseArray.forEach((current) => {
-      current.style.marginTop = '-2rem';
-    });
-    contracted = 1;
-  } else {
-    elipseArray.forEach((current) => {
-      current.style.marginTop = '1rem';
-    });
-    contracted = 0;
-  }
-}
-
 // ================
 
 // Swipe Up / Down / Left / Right
@@ -237,9 +219,7 @@ function shareColours() {
   return share;
 }
 
-const share = document.querySelector('#share');
-
-share.addEventListener('click', function (e) {
+save.addEventListener('click', function (e) {
   let textArea = document.createElement('textarea');
   textArea.value = shareColours();
   document.body.appendChild(textArea);
