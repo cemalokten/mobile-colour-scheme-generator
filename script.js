@@ -7,8 +7,7 @@
 
 'use strict';
 
-// Variable Declarations
-
+// 01 - Variable Declarations
 const boxInner = [...document.getElementsByClassName('flex--box--inner')];
 const colorText = [...document.getElementsByClassName('flex--box--text')];
 
@@ -19,15 +18,14 @@ const infoContainer = document.querySelector('.info--container');
 const save = document.getElementById('save');
 const reload = document.getElementById('reload');
 const info = document.getElementById('info');
-
-// Random Colour Generator
-
+// ============================================================================
+// 02 - Random Number Generator
 // Returns a random positive whole number between two values (min, max)
-// Used throughout to select random array elements
 function randomNumber(min, max) {
   return Math.round(Math.random() * (max - min) + min);
 }
-
+// ============================================================================
+// 03 - Random RGB Colour Generator
 // Returns Object with three random values from 0 - 255
 function randomColour() {
   const r = randomNumber(0, 255);
@@ -39,8 +37,9 @@ function randomColour() {
     b,
   };
 }
-
-/* Takes random values assigned by randomColour() and converts them to base16 / HEX */
+// ============================================================================
+// 04 - Convert RGB to HEX
+// Takes random values assigned by randomColour() and converts them to HEX
 function rgbToHex(obj) {
   const rgbObj = obj;
   let r = rgbObj.r.toString(16);
@@ -51,25 +50,17 @@ function rgbToHex(obj) {
   b = b.length === 1 ? '0' + b : b;
   return `#${r}${g}${b}`.toUpperCase();
 }
-
+// ============================================================================
+// 05 - Background Colour Checker
+// Checks background colour and selects suitable forground font color
+// Formula (r * 0.299 + g * 0.587 + b * 0.114 > 186) taken from Stack Overflow
 function textColor(r, g, b) {
   return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? '#000000' : '#FFFFFF';
 }
-
-// Set Colours
-
-function moveUp(current) {
-  let parent = current.parentNode;
-  let prev = current.previousElementSibling;
-  let oldChild = parent.removeChild(current);
-  parent.insertBefore(oldChild, prev);
-  console.log(current);
-  console.log(parent);
-}
-
-const currentColors = [];
-
-function randomColourSpan(current) {
+// ============================================================================
+// 06 - Assign Random Colours
+// Allocates random colour to individual blocks (instead of all 5)
+function randomColourBlock(current) {
   const element = current;
   if (element.classList.contains('flex--box--inner')) {
     const rgbObj = randomColour();
@@ -84,6 +75,9 @@ function randomColourSpan(current) {
   }
 }
 
+// Generates 5 random colours and updates the pages elements
+// Add's the 5 random colours to an array (currentColors) and then stores them in localStorage
+const currentColors = [];
 function populateRandomColours() {
   boxInner.forEach((current) => {
     const element = current;
@@ -99,9 +93,9 @@ function populateRandomColours() {
     localStorage.setItem('colors', JSON.stringify(currentColors));
   });
 }
-
-const stor = JSON.parse(localStorage.getItem('colors'));
-
+// ============================================================================
+// 07 - Localstorage Session Data
+// Retrieves localStorage data (currentColors) and applies the colours to the page
 function applyLocalStorage(obj) {
   let i = 0;
   boxInner.forEach((current) => {
@@ -117,19 +111,38 @@ function applyLocalStorage(obj) {
   });
 }
 
-if (stor !== null) {
-  applyLocalStorage(stor);
+// Transforms JSON into an object and stores it
+const currentColorsLocalStorage = JSON.parse(localStorage.getItem('colors'));
+
+// Check to see if previous session data exists
+if (currentColorsLocalStorage.length > 0) {
+  applyLocalStorage(currentColorsLocalStorage);
 } else {
   populateRandomColours();
 }
+// ============================================================================
+// 07 - Rearrange Individual Blocks (Upwards)
+function moveUp(current) {
+  let parent = current.parentNode;
+  let prev = current.previousElementSibling;
+  let oldChild = parent.removeChild(current);
+  parent.insertBefore(oldChild, prev);
+}
+
+// 08 - Click to copy HEX code
 
 colorText.forEach((current) => {
   const element = current;
   current.addEventListener('click', () => {
+    // Create temporary textArea
     let textArea = document.createElement('textarea');
+    // Load element textContent into that temporary textArea (e.g #000000)
     textArea.value = element.textContent;
+    // Add the textArea to the page
     document.body.appendChild(textArea);
+    // Select the contents of the textArea (e.g #000000)
     textArea.select();
+    // Copy the contents of the textArea to the user's clipboard (e.g #000000)
     document.execCommand('Copy');
     textArea.remove();
     element.textContent = 'COPIED';
@@ -140,68 +153,19 @@ colorText.forEach((current) => {
   });
 });
 
-// ================
+// 09 - Save all colours to clipboard
 
-// Swipe Up / Down / Left / Right
-let initialValueX = null; // Before move
-let initialValueY = null;
-
-function startTouch(e) {
-  initialValueX = e.touches[0].clientX; // Horizontal postion of click (e.g far left = 0)
-  initialValueY = e.touches[0].clientY; // Veritcal postion of click (eg. top = 0);
-}
-
-function moveTouchSpan(e) {
-  if (initialValueX === null || initialValueY === null) {
-    return;
-  }
-
-  let currentValueX = e.touches[0].clientX;
-  let currentValueY = e.touches[0].clientY;
-
-  let detectDiffereceX = initialValueX - currentValueX;
-  let detectDiffereceY = initialValueY - currentValueY;
-
-  if (Math.abs(detectDiffereceX) > Math.abs(detectDiffereceY)) {
-    // sliding horizontally
-    if (detectDiffereceX > 0) {
-      // swiped left
-      randomColourSpan(e.target);
-    } else {
-      // swiped right
-      randomColourSpan(e.target);
-    }
-  } else if (detectDiffereceY > 0) {
-    moveUp(e.target.parentNode);
-  } else {
-    populateRandomColours();
-  }
-
-  initialValueX = null;
-  initialValueY = null;
-
-  e.preventDefault();
-}
-
-// document.addEventListener('touchstart', startTouch, false);
-// document.addEventListener('touchmove', moveTouch, false);
-
-boxInner.forEach((current) => {
-  current.addEventListener('touchstart', startTouch, false);
-  current.addEventListener('touchmove', moveTouchSpan, false);
-});
-
-function shareColours() {
-  const share = colorText.map((c, i) => {
+function saveColours() {
+  const saved = colorText.map((c, i) => {
     return ` COLOUR ${i + 1} - ${c.textContent}
      `;
   });
-  return share;
+  return saved;
 }
 
-save.addEventListener('click', function (e) {
+save.addEventListener('click', function () {
   let textArea = document.createElement('textarea');
-  textArea.value = shareColours();
+  textArea.value = saveColours();
   document.body.appendChild(textArea);
   textArea.select();
   document.execCommand('Copy');
@@ -213,94 +177,78 @@ save.addEventListener('click', function (e) {
   }, 800);
 });
 
-reload.addEventListener('click', populateRandomColours);
+// 10 - Touch Functions & Events
 
-// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
-let vh = window.innerHeight * 0.01;
-// Then we set the value in the --vh custom property to the root of the document
-document.documentElement.style.setProperty('--vh', `${vh}px`);
+let initialValueX = null;
+let initialValueY = null;
 
-window.addEventListener('resize', function () {
-  vh = window.innerHeight * 0.01;
-  // Then we set the value in the --vh custom property to the root of the document
-  document.documentElement.style.setProperty('--vh', `${vh}px`);
+// Stores coordinates or dimensions of the starting point of the touch event
+function startTouch(e) {
+  initialValueX = e.touches[0].clientX; // Horizontal postion of click (e.g far left = 0)
+  initialValueY = e.touches[0].clientY; // Veritcal postion of click (eg. top = 0);
+}
+
+// Checks to see if touch event has started
+// If it has it records the end point of the touch
+// Compares the values and decides if it was more up than down, etc.
+function moveTouchSpan(e) {
+  if (initialValueX === null || initialValueY === null) {
+    return;
+  }
+
+  let currentValueX = e.touches[0].clientX;
+  let currentValueY = e.touches[0].clientY;
+  let detectDiffereceX = initialValueX - currentValueX;
+  let detectDiffereceY = initialValueY - currentValueY;
+
+  if (Math.abs(detectDiffereceX) > Math.abs(detectDiffereceY)) {
+    if (detectDiffereceX > 0) {
+      randomColourBlock(e.target); // Swipe left
+    } else {
+      randomColourBlock(e.target); // Swipe right
+    }
+  } else if (detectDiffereceY > 0) {
+    moveUp(e.target.parentNode); // Swipe up
+  } else {
+    populateRandomColours(); // Swipe down
+  }
+  initialValueX = null;
+  initialValueY = null;
+  e.preventDefault();
+}
+
+boxInner.forEach((current) => {
+  current.addEventListener('touchstart', startTouch, false);
+  current.addEventListener('touchmove', moveTouchSpan, false);
 });
 
+// 11 - Adjust viewport height for Mobile / Desktop
+
+// Get viewport height * 0.01 = 1% of viewport
+// https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+let verticalHeight = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${verticalHeight}px`);
+
+window.addEventListener('resize', function () {
+  verticalHeight = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${verticalHeight}px`);
+});
+
+// 12 - Footer Button Events
+
+// Show informatiom
 info.addEventListener('click', function () {
   infoContainer.classList.toggle('hidden');
   footer.classList.toggle('blur');
   main.classList.toggle('blur');
 });
 
+// Hide information
 infoContainer.addEventListener('click', function () {
   infoContainer.classList.toggle('hidden');
   footer.classList.toggle('blur');
   main.classList.toggle('blur');
 });
 
-// DRAG
-
-// let dragElement = '';
-
-// function dragStart(e) {
-//   // this.style.opacity = '0.5';
-//   dragElement = this;
-//   e.dataTransfer.effectAllowed = 'move';
-//   e.dataTransfer.setData('text/html', this.innerHTML);
-// }
-
-// function dragEnd(e) {
-//   // this.style.opacity = '1';
-//   // elipseArray.forEach(function (item) {
-//   //   item.firstElementChild.classList.remove('over');
-//   // });
-// }
-
-// function dragOver(e) {
-//   if (e.preventDefault) {
-//     e.preventDefault();
-//   }
-
-//   e.dataTransfer.dropEffect = 'move';
-
-//   return false;
-// }
-
-// /* The dragenter event handler is used to toggle the over class instead of dragover. If you use dragover, the CSS class would be toggled many times as the event dragover continued to fire. Ultimately, that would cause the browser's renderer to do a large amount of unnecessary work. */
-// function dragEnter(e) {
-//   // this.firstElementChild.classList.add('over');
-// }
-
-// function dragLeave(e) {
-//   // this.firstElementChild.classList.remove('over');
-// }
-
-// function dropEvent(e) {
-//   if (e.stopPropagation) {
-//     e.stopPropagation(); // stops the browser from redirecting.
-//   }
-
-//   if (dragElement !== this) {
-//     dragElement.innerHTML = this.innerHTML;
-//     this.innerHTML = e.dataTransfer.getData('text/html');
-//   }
-
-//   return false;
-// }
-
-// // elipseArray.forEach((current) => {
-// //   const element = current;
-// //   element.firstElementChild.classList.remove('over');
-// // });
-
-// // What does the false do here
-// elipseArray.forEach((current) => {
-//   const element = current;
-//   element.addEventListener('dragstart', dragStart, false);
-//   element.addEventListener('dragend', dragEnd, false);
-//   element.addEventListener('dragenter', dragEnter, false);
-//   element.addEventListener('dragover', dragOver, false);
-//   element.addEventListener('dragleave', dragLeave, false);
-//   element.addEventListener('drop', dropEvent, false);
-//   element.addEventListener('dragend', dragEnd, false);
-// });
+// Refresh colours in desktop mode
+reload.addEventListener('click', populateRandomColours);
