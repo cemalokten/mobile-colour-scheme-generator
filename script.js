@@ -10,7 +10,7 @@
 // Variable Declarations
 
 const boxInner = [...document.getElementsByClassName('flex--box--inner')];
-const colorText = [...document.getElementsByClassName('flex--elipse--text')];
+const colorText = [...document.getElementsByClassName('flex--box--text')];
 
 const main = document.querySelector('main');
 const footer = document.querySelector('footer');
@@ -58,8 +58,6 @@ function textColor(r, g, b) {
 
 // Set Colours
 
-// childNode[4].parentNode.insertBefore(childNode[4], childNode[3]);
-
 function moveUp(current) {
   let parent = current.parentNode;
   let prev = current.previousElementSibling;
@@ -73,15 +71,17 @@ const currentColors = [];
 
 function randomColourSpan(current) {
   const element = current;
-  const rgbObj = randomColour();
-  const r = rgbObj.r;
-  const g = rgbObj.g;
-  const b = rgbObj.b;
-  let span = element.querySelector('span');
-  element.style.color = textColor(r, g, b);
-  element.style.backgroundColor = `rgb(${r},${g},${b})`;
-  // element.style.background = `radial-gradient(circle, rgb(${r},${g},${b}) 0%, rgba(255, 255, 255, 0) 200%)`;
-  span.textContent = rgbToHex(rgbObj);
+  if (element.classList.contains('flex--box--inner')) {
+    const rgbObj = randomColour();
+    const r = rgbObj.r;
+    const g = rgbObj.g;
+    const b = rgbObj.b;
+    let span = element.querySelector('span');
+    element.style.color = textColor(r, g, b);
+    element.style.backgroundColor = `rgb(${r},${g},${b})`;
+    span.textContent = rgbToHex(rgbObj);
+    span.style.backgroundColor = 'transparent';
+  }
 }
 
 function populateRandomColours() {
@@ -95,43 +95,37 @@ function populateRandomColours() {
     currentColors.push({ r, g, b });
     element.style.color = textColor(r, g, b);
     element.style.backgroundColor = `rgb(${r},${g},${b})`;
-    // element.style.background = `radial-gradient(circle, rgb(${r},${g},${b}) 0%, rgba(255, 255, 255, 0) 80%)`;
     span.textContent = rgbToHex(rgbObj);
     localStorage.setItem('colors', JSON.stringify(currentColors));
   });
 }
 
 const stor = JSON.parse(localStorage.getItem('colors'));
-console.log(stor);
 
 function applyLocalStorage(obj) {
   let i = 0;
-  boxInner.forEach((element) => {
+  boxInner.forEach((current) => {
+    const element = current;
     const r = obj[i].r;
     const g = obj[i].g;
     const b = obj[i].b;
     let span = element.querySelector('span');
     element.style.color = textColor(r, g, b);
-    // element.style.background = `radial-gradient(circle, rgb(${r},${g},${b}) 0%, rgba(255, 255, 255, 0) 200%)`;
-
     element.style.backgroundColor = `rgb(${r},${g},${b})`;
     span.textContent = rgbToHex(obj[i]);
-    i++;
+    i += 1;
   });
 }
 
 if (stor !== null) {
   applyLocalStorage(stor);
-  console.log('OLD COLOURS!');
 } else {
   populateRandomColours();
-  console.log('NEW');
 }
 
 colorText.forEach((current) => {
   const element = current;
   current.addEventListener('click', () => {
-    console.log('run');
     let textArea = document.createElement('textarea');
     textArea.value = element.textContent;
     document.body.appendChild(textArea);
