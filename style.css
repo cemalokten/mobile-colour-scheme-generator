@@ -13,7 +13,7 @@
 }
 
 :root {
-  --grey: #f8f8f8;
+  --vh: 1vh;
 }
 
 @font-face {
@@ -30,25 +30,57 @@
   font-style: medium;
 }
 
+@font-face {
+  font-family: 'IBM';
+  src: url('./fonts/IBMPlexMono-Regular.otf') format('opentype');
+  font-weight: medium;
+  font-style: medium;
+}
+
+@font-face {
+  font-family: 'Apercu';
+  src: url('./fonts/ApercuMonoPro-Regular-Trial.woff2') format('woff2');
+  font-weight: medium;
+  font-style: medium;
+}
+
 html {
-  background-color: rgb(228, 228, 228);
-  color: white;
+  background-color: rgb(235, 235, 235);
+  color: rgb(0, 0, 0);
+  font-size: 0.9rem;
+  font-family: Lab Mono Web;
+}
+
+li {
+  list-style: none;
+  line-height: 7em;
 }
 
 body {
-  font-size: 1rem;
+  font-size: 1.3rem;
   display: flex;
   min-height: 100vh;
   flex-direction: column;
 }
 
-/* html,
+html,
 body {
+  position: relative;
+  min-height: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
   overscroll-behavior-y: contain;
-} */
+
+  display: flex;
+}
+
+.blur {
+  filter: blur(1em);
+}
 
 main {
-  min-height: 100vh;
 }
 
 section {
@@ -57,8 +89,9 @@ section {
 
 header,
 footer {
+  /* filter: blur(0.1em); */
   width: 100vw;
-  height: 4rem;
+  height: calc(var(--vh, 1vh) * 100 / 10.7);
   position: absolute;
 }
 
@@ -68,13 +101,18 @@ footer {
 
 h1,
 h2 {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: normal;
   font-family: Salmanazar-Bold;
+  text-transform: uppercase;
 }
 
 .flex {
   display: flex;
+}
+
+.flex--full {
+  flex: 1;
 }
 
 .flex--row {
@@ -90,42 +128,45 @@ h2 {
   justify-content: center;
 }
 
+.flex--center--2 {
+  align-items: center;
+}
+
+.flex--space--between {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.padding {
+  padding: 0 1.2rem 0 1.2rem;
+}
+
 .flex--elipse {
   position: absolute;
   padding: 2rem;
   justify-content: center;
   font-family: Lab Mono Web;
-  width: 1000px;
+  width: inherit;
   height: inherit;
-  border-radius: 50%;
-
+  border-radius: inherit;
   transition: all 0.5s;
   cursor: grab;
   transition: all 0.5s;
-
-  /* overflow: none;
-  padding: 2rem;
-  justify-content: center;
-  font-family: Lab Mono Web;
-  width: 150vw;
-  height: 9rem;
-  border-radius: 50%;
-  margin-top: -1.2rem;
-  margin-top: -3rem;
-  transition: all 0.5s; */
 }
 
 .drag--box {
   overflow: hidden;
   display: flex;
   justify-content: center;
-  margin-top: -1rem;
+  align-items: center;
+  margin-top: 0rem;
   position: relative;
   width: 100vw;
-  height: 18vh;
+  height: calc(var(--vh, 1vh) * 100 / 5.5);
   border-radius: 0;
   transition: transform 1s;
   z-index: 50;
+  background-color: transparent;
 }
 
 .drag--box:first-child {
@@ -139,6 +180,26 @@ h2 {
 /* .flex--elipse:first-child {
   margin-top: 0;
 } */
+
+.info--container {
+  color: rgb(255, 255, 255);
+  height: 100%;
+  width: 100vw;
+  position: absolute;
+  background-color: rgba(150, 150, 150, 0.5);
+  z-index: 999;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.info--container--block {
+  height: calc(var(--vh, 1vh) * 100 / 5.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .flex--elipse.over {
   filter: drop-shadow(0 0 0.75rem crimson);
@@ -155,8 +216,8 @@ h2 {
   user-select: none; /* Likely future */
 }
 
-.blank--15 {
-  width: 16px;
+.pointer {
+  cursor: pointer;
 }
 
 /* @media (min-width: 1025px) {

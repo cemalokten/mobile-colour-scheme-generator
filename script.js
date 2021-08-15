@@ -1,5 +1,10 @@
 'use strict';
 
+// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+let vh = window.innerHeight * 0.01;
+// Then we set the value in the --vh custom property to the root of the document
+document.documentElement.style.setProperty('--vh', `${vh}px`);
+
 // Variable Declarations
 
 const flexElipse = [...document.getElementsByClassName('flex--elipse')];
@@ -8,6 +13,22 @@ const flexElipseText = [...document.getElementsByClassName('flex--elipse--text')
 
 const body = document.querySelector('body');
 
+const info = document.getElementById('info');
+const infoContainer = document.querySelector('.info--container');
+const main = document.querySelector('main');
+const footer = document.querySelector('footer');
+
+info.addEventListener('click', function () {
+  infoContainer.classList.toggle('hidden');
+  footer.classList.toggle('blur');
+  main.classList.toggle('blur');
+});
+
+infoContainer.addEventListener('click', function () {
+  infoContainer.classList.toggle('hidden');
+  footer.classList.toggle('blur');
+  main.classList.toggle('blur');
+});
 // Random Colour Generator
 
 // Returns a random positive whole number between two values (min, max)
@@ -21,15 +42,22 @@ function randomColour() {
   const r = randomNumber(0, 255);
   const g = randomNumber(0, 255);
   const b = randomNumber(0, 255);
-  return { r, g, b };
+  return {
+    r,
+    g,
+    b,
+  };
 }
 
 /* Takes random values assigned by randomColour() and converts them to base16 / HEX */
 function rgbToHex(obj) {
   const rgbObj = obj;
-  const r = rgbObj.r.toString(16);
-  const g = rgbObj.g.toString(16);
-  const b = rgbObj.b.toString(16);
+  let r = rgbObj.r.toString(16);
+  let g = rgbObj.g.toString(16);
+  let b = rgbObj.b.toString(16);
+  r = r.length === 1 ? '0' + r : r;
+  g = g.length === 1 ? '0' + g : g;
+  b = b.length === 1 ? '0' + b : b;
   return `#${r}${g}${b}`.toUpperCase();
 }
 
@@ -61,6 +89,7 @@ function randomColourSpan(current) {
   let span = element.querySelector('span');
   element.style.color = textColor(r, g, b);
   element.style.backgroundColor = `rgb(${r},${g},${b})`;
+  // element.style.background = `radial-gradient(circle, rgb(${r},${g},${b}) 0%, rgba(255, 255, 255, 0) 200%)`;
   span.textContent = rgbToHex(rgbObj);
 }
 
@@ -75,6 +104,7 @@ function populateRandomColours() {
     currentColors.push({ r, g, b });
     element.style.color = textColor(r, g, b);
     element.style.backgroundColor = `rgb(${r},${g},${b})`;
+    // element.style.background = `radial-gradient(circle, rgb(${r},${g},${b}) 0%, rgba(255, 255, 255, 0) 80%)`;
     span.textContent = rgbToHex(rgbObj);
     localStorage.setItem('colors', JSON.stringify(currentColors));
   });
@@ -91,6 +121,8 @@ function applyLocalStorage(obj) {
     const b = obj[i].b;
     let span = element.querySelector('span');
     element.style.color = textColor(r, g, b);
+    // element.style.background = `radial-gradient(circle, rgb(${r},${g},${b}) 0%, rgba(255, 255, 255, 0) 200%)`;
+
     element.style.backgroundColor = `rgb(${r},${g},${b})`;
     span.textContent = rgbToHex(obj[i]);
     i++;
@@ -185,7 +217,7 @@ function moveTouchSpan(e) {
 // document.addEventListener('touchstart', startTouch, false);
 // document.addEventListener('touchmove', moveTouch, false);
 
-elipseArray.forEach((current) => {
+flexElipse.forEach((current) => {
   current.addEventListener('touchstart', startTouch, false);
   current.addEventListener('touchmove', moveTouchSpan, false);
 });
@@ -207,4 +239,9 @@ share.addEventListener('click', function (e) {
   textArea.select();
   document.execCommand('Copy');
   textArea.remove();
+  share.textContent = 'COPIED';
+  setTimeout(() => {
+    share.textContent = 'SAVE';
+    share.style.cursor = 'pointer';
+  }, 800);
 });
