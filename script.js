@@ -1,39 +1,25 @@
+/* ===============================================================
+ * Companion Studio Coding Challenge
+ * Author:  Cemal Okten
+ * Github: https://github.com/cemalokten/fac-application-website
+ * Language: JS
+================================================================== */
+
 'use strict';
-
-// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
-let vh = window.innerHeight * 0.01;
-// Then we set the value in the --vh custom property to the root of the document
-document.documentElement.style.setProperty('--vh', `${vh}px`);
-
-window.addEventListener('resize', function () {
-  vh = window.innerHeight * 0.01;
-  // Then we set the value in the --vh custom property to the root of the document
-  document.documentElement.style.setProperty('--vh', `${vh}px`);
-});
 
 // Variable Declarations
 
-const flexElipse = [...document.getElementsByClassName('flex--box--inner')];
-const flexElipseText = [...document.getElementsByClassName('flex--elipse--text')];
+const boxInner = [...document.getElementsByClassName('flex--box--inner')];
+const colorText = [...document.getElementsByClassName('flex--elipse--text')];
 
-const info = document.getElementById('info');
-const infoContainer = document.querySelector('.info--container');
 const main = document.querySelector('main');
 const footer = document.querySelector('footer');
+const infoContainer = document.querySelector('.info--container');
+
+const save = document.getElementById('save');
 const reload = document.getElementById('reload');
-const save = document.querySelector('#save');
+const info = document.getElementById('info');
 
-info.addEventListener('click', function () {
-  infoContainer.classList.toggle('hidden');
-  footer.classList.toggle('blur');
-  main.classList.toggle('blur');
-});
-
-infoContainer.addEventListener('click', function () {
-  infoContainer.classList.toggle('hidden');
-  footer.classList.toggle('blur');
-  main.classList.toggle('blur');
-});
 // Random Colour Generator
 
 // Returns a random positive whole number between two values (min, max)
@@ -99,7 +85,7 @@ function randomColourSpan(current) {
 }
 
 function populateRandomColours() {
-  flexElipse.forEach((current) => {
+  boxInner.forEach((current) => {
     const element = current;
     const rgbObj = randomColour();
     const r = rgbObj.r;
@@ -120,7 +106,7 @@ console.log(stor);
 
 function applyLocalStorage(obj) {
   let i = 0;
-  flexElipse.forEach((element) => {
+  boxInner.forEach((element) => {
     const r = obj[i].r;
     const g = obj[i].g;
     const b = obj[i].b;
@@ -142,7 +128,7 @@ if (stor !== null) {
   console.log('NEW');
 }
 
-flexElipseText.forEach((current) => {
+colorText.forEach((current) => {
   const element = current;
   current.addEventListener('click', () => {
     console.log('run');
@@ -206,13 +192,13 @@ function moveTouchSpan(e) {
 // document.addEventListener('touchstart', startTouch, false);
 // document.addEventListener('touchmove', moveTouch, false);
 
-flexElipse.forEach((current) => {
+boxInner.forEach((current) => {
   current.addEventListener('touchstart', startTouch, false);
   current.addEventListener('touchmove', moveTouchSpan, false);
 });
 
 function shareColours() {
-  const share = flexElipseText.map((c, i) => {
+  const share = colorText.map((c, i) => {
     return ` COLOUR ${i + 1} - ${c.textContent}
      `;
   });
@@ -226,14 +212,37 @@ save.addEventListener('click', function (e) {
   textArea.select();
   document.execCommand('Copy');
   textArea.remove();
-  share.textContent = 'COPIED';
+  save.textContent = 'COPIED';
   setTimeout(() => {
-    share.textContent = 'SAVE';
-    share.style.cursor = 'pointer';
+    save.textContent = 'SAVE';
+    save.style.cursor = 'pointer';
   }, 800);
 });
 
 reload.addEventListener('click', populateRandomColours);
+
+// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+let vh = window.innerHeight * 0.01;
+// Then we set the value in the --vh custom property to the root of the document
+document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+window.addEventListener('resize', function () {
+  vh = window.innerHeight * 0.01;
+  // Then we set the value in the --vh custom property to the root of the document
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+});
+
+info.addEventListener('click', function () {
+  infoContainer.classList.toggle('hidden');
+  footer.classList.toggle('blur');
+  main.classList.toggle('blur');
+});
+
+infoContainer.addEventListener('click', function () {
+  infoContainer.classList.toggle('hidden');
+  footer.classList.toggle('blur');
+  main.classList.toggle('blur');
+});
 
 // DRAG
 
