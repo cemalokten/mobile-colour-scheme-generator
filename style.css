@@ -1,7 +1,7 @@
 /* ===============================================================
  * Companion Studio Coding Challenge
  * Author:  Cemal Okten
- * Github: https://github.com/cemalokten/fac-application-website
+ * Github: https://github.com/cemalokten/
  * Language: CSS
 ================================================================== */
 
@@ -154,6 +154,13 @@ h2 {
   align-items: center;
 }
 
+.no--copy {
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+}
+
 .blur {
   filter: blur(3em);
 }
@@ -179,15 +186,15 @@ h2 {
 }
 
 .item--1::before {
-  content: '↓ GENERATE NEW COLOURS ↓';
+  content: 'SWIPE ↓ FOR NEW COLOURS';
 }
 
 .item--2::before {
-  content: '↑ MOVE COLOUR UP ↑';
+  content: 'SWIPE ↑ TO MOVE BLOCK UP';
 }
 
 .item--3::before {
-  content: '← CHANGE COLOUR →';
+  content: 'SWIPE ← OR → TO CHANGE COLOUR ';
 }
 
 .item--4::before {

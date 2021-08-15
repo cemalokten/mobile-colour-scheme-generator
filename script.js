@@ -1,12 +1,26 @@
 /* ===============================================================
  * Companion Studio Coding Challenge
  * Author:  Cemal Okten
- * Github: https://github.com/cemalokten/fac-application-website
+ * Github: https://github.com/cemalokten/
  * Language: JS
+ * 01 - Variable Declarations
+ * 02 - Random Number Generator
+ * 03 - Random RGB Colour Generator
+ * 04 - Convert RGB to HEX
+ * 05 - Background Colour Checker
+ * 06 - Assign Random Colours
+ * 07 - Localstorage Session Data
+ * 08 - Rearrange Individual Blocks (Upwards)
+ * 09 - Click to copy HEX code
+ * 10 - Save all colours to clipboard
+ * 11 - Touch Functions & Events
+ * 12 - Adjust viewport height for Mobile / Desktop
+ * 13 - Footer Button Events
 ================================================================== */
 
 'use strict';
 
+// ============================================================================
 // 01 - Variable Declarations
 const boxInner = [...document.getElementsByClassName('flex--box--inner')];
 const colorText = [...document.getElementsByClassName('flex--box--text')];
@@ -18,12 +32,14 @@ const infoContainer = document.querySelector('.info--container');
 const save = document.getElementById('save');
 const reload = document.getElementById('reload');
 const info = document.getElementById('info');
+
 // ============================================================================
 // 02 - Random Number Generator
 // Returns a random positive whole number between two values (min, max)
 function randomNumber(min, max) {
   return Math.round(Math.random() * (max - min) + min);
 }
+
 // ============================================================================
 // 03 - Random RGB Colour Generator
 // Returns Object with three random values from 0 - 255
@@ -37,6 +53,7 @@ function randomColour() {
     b,
   };
 }
+
 // ============================================================================
 // 04 - Convert RGB to HEX
 // Takes random values assigned by randomColour() and converts them to HEX
@@ -50,6 +67,7 @@ function rgbToHex(obj) {
   b = b.length === 1 ? '0' + b : b;
   return `#${r}${g}${b}`.toUpperCase();
 }
+
 // ============================================================================
 // 05 - Background Colour Checker
 // Checks background colour and selects suitable forground font color
@@ -57,6 +75,7 @@ function rgbToHex(obj) {
 function textColor(r, g, b) {
   return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? '#000000' : '#FFFFFF';
 }
+
 // ============================================================================
 // 06 - Assign Random Colours
 // Allocates random colour to individual blocks (instead of all 5)
@@ -76,7 +95,8 @@ function randomColourBlock(current) {
 }
 
 // Generates 5 random colours and updates the pages elements
-// Add's the 5 random colours to an array (currentColors) and then stores them in localStorage
+// Add's the 5 random colours to an array (currentColors)
+// Store them in localStorage
 const currentColors = [];
 function populateRandomColours() {
   boxInner.forEach((current) => {
@@ -93,9 +113,10 @@ function populateRandomColours() {
     localStorage.setItem('colors', JSON.stringify(currentColors));
   });
 }
+
 // ============================================================================
 // 07 - Localstorage Session Data
-// Retrieves localStorage data (currentColors) and applies the colours to the page
+// Retrieves localStorage data (currentColors) and applies it to the page
 function applyLocalStorage(obj) {
   let i = 0;
   boxInner.forEach((current) => {
@@ -120,8 +141,9 @@ if (currentColorsLocalStorage.length > 0) {
 } else {
   populateRandomColours();
 }
+
 // ============================================================================
-// 07 - Rearrange Individual Blocks (Upwards)
+// 08 - Rearrange Individual Blocks (Upwards)
 function moveUp(current) {
   let parent = current.parentNode;
   let prev = current.previousElementSibling;
@@ -129,8 +151,8 @@ function moveUp(current) {
   parent.insertBefore(oldChild, prev);
 }
 
-// 08 - Click to copy HEX code
-
+// ============================================================================
+// 09 - Click to copy HEX code
 colorText.forEach((current) => {
   const element = current;
   current.addEventListener('click', () => {
@@ -153,8 +175,8 @@ colorText.forEach((current) => {
   });
 });
 
-// 09 - Save all colours to clipboard
-
+// ============================================================================
+// 10 - Save all colours to clipboard
 function saveColours() {
   const saved = colorText.map((c, i) => {
     return ` COLOUR ${i + 1} - ${c.textContent}
@@ -177,8 +199,8 @@ save.addEventListener('click', function () {
   }, 800);
 });
 
-// 10 - Touch Functions & Events
-
+// ============================================================================
+// 11 - Touch Functions & Events
 let initialValueX = null;
 let initialValueY = null;
 
@@ -222,8 +244,8 @@ boxInner.forEach((current) => {
   current.addEventListener('touchmove', moveTouchSpan, false);
 });
 
-// 11 - Adjust viewport height for Mobile / Desktop
-
+// ============================================================================
+// 12 - Adjust viewport height for Mobile / Desktop
 // Get viewport height * 0.01 = 1% of viewport
 // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
 let verticalHeight = window.innerHeight * 0.01;
@@ -234,8 +256,8 @@ window.addEventListener('resize', function () {
   document.documentElement.style.setProperty('--vh', `${verticalHeight}px`);
 });
 
-// 12 - Footer Button Events
-
+// ============================================================================
+// 13 - Footer Button Events
 // Show informatiom
 info.addEventListener('click', function () {
   infoContainer.classList.toggle('hidden');
