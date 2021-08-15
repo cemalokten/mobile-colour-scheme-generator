@@ -69,7 +69,6 @@ body {
   min-height: 100%;
   height: 100%;
   overflow-x: hidden;
-  overflow-y: scroll;
 
   overscroll-behavior-y: contain;
 
@@ -182,16 +181,35 @@ h2 {
 } */
 
 .info--container {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
   height: 100%;
   width: 100vw;
   position: absolute;
-  background-color: rgba(150, 150, 150, 0.5);
+  background-color: rgba(219, 219, 219, 0.7);
   z-index: 999;
 }
 
 .hidden {
   visibility: hidden;
+}
+
+.hidden--desktop {
+  visibility: hidden;
+}
+
+.info--container--block {
+  height: calc(var(--vh, 1vh) * 100 / 5.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info--container--desktop {
+  height: 100%;
+  width: 100vw;
+  position: absolute;
+  background-color: rgb(219, 219, 219);
+  z-index: 999;
 }
 
 .info--container--block {
@@ -220,29 +238,64 @@ h2 {
   cursor: pointer;
 }
 
-/* @media (min-width: 1025px) {
-  body {
-    font-size: 1rem;
+#regenerate {
+  visibility: hidden;
+}
+
+#share {
+  width: 2rem;
+}
+
+.item--1::before {
+  content: '↓ GENERATE NEW COLOURS ↓';
+}
+
+.item--2::before {
+  content: '↑ MOVE COLOUR UP ↑';
+}
+
+.item--3::before {
+  content: '← CHANGE COLOUR →';
+}
+
+.item--4::before {
+  content: 'CLICK # CODE TO COPY';
+}
+
+.item--5::before {
+  content: 'CLICK SAVE TO COPY ALL';
+}
+
+@media (min-width: 1200px) {
+  .padding {
+    padding: 0 3rem 0 3rem;
   }
 
-  .flex--elipse {
-    justify-content: space-around;
-    margin-top: 0;
-    height: 30rem;
-    width: 8rem;
-    margin-left: 3rem;
+  #regenerate {
+    visibility: visible;
   }
 
-  .flex--elipse:first-child {
-    margin-left: 0;
+  .hidden--desktop {
+    visibility: hidden;
   }
 
-  .flex {
-    display: flex;
-    flex-direction: row;
+  .item--1::before {
+    content: '';
   }
 
-  .flex--row {
-    flex-direction: column;
+  .item--2::before {
+    content: '';
   }
-} */
+
+  .item--3::before {
+    content: 'FOR FULL FUNCTIONALITY PLEASE VIEW ON A MOBILE DEVICE';
+  }
+
+  .item--4::before {
+    content: '';
+  }
+
+  .item--5::before {
+    content: '';
+  }
+}
