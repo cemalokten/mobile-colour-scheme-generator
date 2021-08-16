@@ -32,6 +32,7 @@ Font 2 - [`Lab Mono Web`](https://github.com/hatsumatsu/Lab-Mono)
 - [x] Tested on Android Firefox and Chrome
 - [x] Tested in Mobile developer mode on Firefox, Chrome and Edge
 - [x] Desktop version tested on Firefox, Chrome and Edge
+- [ ] Saves previously generated set of colours to localstorage, but not if an individual block is modified
 
 ### ⏳ Future improvements
 
