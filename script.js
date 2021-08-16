@@ -136,7 +136,7 @@ function applyLocalStorage(obj) {
 const currentColorsLocalStorage = JSON.parse(localStorage.getItem('colors'));
 
 // Check to see if previous session data exists
-if (currentColorsLocalStorage.length > 0) {
+if (currentColorsLocalStorage !== null) {
   applyLocalStorage(currentColorsLocalStorage);
 } else {
   populateRandomColours();
