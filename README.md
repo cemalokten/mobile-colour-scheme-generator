@@ -29,7 +29,6 @@ Font 2 - [`Lab Mono Web`](https://github.com/hatsumatsu/Lab-Mono)
 
 ### 🦺 Testing
 
-- Testing includes a basic use test
 - [x] Tested on Android Firefox and Chrome
 - [x] Tested in Mobile developer mode on Firefox, Chrome and Edge
 - [x] Desktop version tested on Firefox, Chrome and Edge
