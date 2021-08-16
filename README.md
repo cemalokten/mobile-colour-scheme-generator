@@ -1,4 +1,4 @@
-### MOBILE COLOUR SCHEME GENERATOR 🌈
+### MOBILE COLOUR SCHEME GENERATOR 🔮
 
 Randomly generate colour schemes, adjust them, rearrange them and share them.
 
@@ -8,7 +8,7 @@ Font 1 - Trial version of [`Salmanzar`](https://www.205.tf/Font/37/salmanazar/)
 
 Font 2 - [`Lab Mono Web`](https://github.com/hatsumatsu/Lab-Mono)
 
-### Features
+### 🧱 Features
 
 - Swipe `down ↓` to generate a set of new colours
 - Swipe `up ↑` on individual blocks to move them up
